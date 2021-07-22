@@ -61,7 +61,7 @@ app.post('/', (req,res) => {
     const {
         longUrl
     } = req.body 
-    var shortURL = "https://shorten.codes/"+sludge;
+    var shortURL = "http://shorten.codes/"+sludge;
     //console.log(longUrl);
     //console.log(sludge);
     var foundURL =  URLSchemaMongo.findOne({url});
