@@ -1,0 +1,21 @@
+{
+  "name": "shorten-codes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.3",
+    "nodemon": "^2.0.12",
+    "shortid": "^2.2.16",
+    "valid-url": "^1.0.9"
+  }
+}

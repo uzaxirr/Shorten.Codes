@@ -1,0 +1,1 @@
+const ValidURL = require('valid-url');
