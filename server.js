@@ -3,6 +3,7 @@
 const express = require('express');
 const port = process.env.PORT || 8080;
 const app = express();
+const morgan = require('morgan')
 const ValidURL = require('valid-url');
 const path = require('path');
 const URLSchemaMongo = require('./models/urlModel');
@@ -13,7 +14,8 @@ const bodyParser = require('body-parser');
 const { type } = require('os');
 dotenv.config()
 
-//app.use(mainRouter);
+app.use(morgan('combined'));
+
 app.use(express.static(path.join(__dirname, 'src')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
