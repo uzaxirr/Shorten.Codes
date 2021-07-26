@@ -1,87 +1,41 @@
-//https://www.section.io/engineering-education/nodejs-url-shortener/
+require('dotenv').config();
+const express           =     require('express');
+const port              =     process.env.PORT || 8080;
+const app               =     express();
+const morgan            =     require('morgan')
+const path              =     require('path');
+const cookieParser      =     require("cookie-parser");
+const mongoose          =     require('mongoose');
+const mainRoute         =     require('./routes/rootRoute');
+const signUpRoute       =     require('./routes/sign-upRoute');
+const loginRoute        =     require('./routes/loginRoute');
+const dashboardRoute    =     require('./routes/dashboardRoute');
+const logoutRoute       =     require('./routes/logoutRoute')
+const DB_USRNAME        =     process.env.DB_USERNAME;
+const DB_PSWRD          =     process.env.DB_PASSWORD;
 
-const express = require('express');
-const port = process.env.PORT || 8080;
-const app = express();
-const morgan = require('morgan')
-const ValidURL = require('valid-url');
-const path = require('path');
-const URLSchemaMongo = require('./models/urlModel');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-//const mainRouter = require('./routes/mainRoutes');
-const bodyParser = require('body-parser');
-const { type } = require('os');
-dotenv.config()
+//dotenv.config()
+
 
 app.use(morgan('combined'));
-
 app.use(express.static(path.join(__dirname, 'src')));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 
-
-app.get('/', async (req,res) => {
-    //console.log(req.body);
-    console.log(sludge);
-
-    console.log("testing");
-
-    res.sendFile(path.join(__dirname, '../src/index.html'));
-})
-// app.get('/:sludge', (req,res) => {
+app.use('/sign-up', signUpRoute);
+app.use('/login', loginRoute);
+app.use('/logout', logoutRoute)
+app.use('/dashboard', dashboardRoute);
+app.use('/', mainRoute);
 
 
-//     // Schema.find ( {param : param}
-//     //console.log(req.params.sludge);
-//     res.redirect("https://google.com")
-// }
-// )
-
-app.get('/:sludge', async (req, res) => {
-    const foundObj =  await URLSchemaMongo.findOne({urlCode: req.params.sludge});
-    if(foundObj)
-    {
-        console.log(foundObj)
-        return res.redirect(foundObj.longUrl)
-    }
-    else
-    {
-        return res.status(404).json("URL Not Found");
-    }
-})
-
-
-
-app.post('/', (req,res) => {
-
-    // 1. 
-    const url = req.body.name_field;
-    var sludge = req.body.sludge;
-    const {
-        longUrl
-    } = req.body 
-    var shortURL = "http://shorten.codes/"+sludge;
-    //console.log(longUrl);
-    //console.log(sludge);
-    var foundURL =  URLSchemaMongo.findOne({url});
-    foundURL = new URLSchemaMongo({
-        longUrl: url,
-        shortUrl: shortURL,
-        urlCode: sludge,
-        date : new Date()
-    })
-     foundURL.save()
-    
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ "URL Recived": url, "Sludge":sludge, "Short URL":shortURL }));
-    //res.redirect(shortURL);
-})
-
-
-const MONGO_PASSWORD = "Uzair@Saad786";
 // ${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
-const MONGO_URL = "mongodb+srv://uzair:neymarjr11@cluster0.hrfhj.mongodb.net/URL-DB?retryWrites=true&w=majority";
+//const MONGO_URL = 'mongodb+srv://uzair:neymarjr11@cluster0.hrfhj.mongodb.net/URL-DB?retryWrites=true&w=majority';
+console.log(process.env.DB_USERNAME);
+console.log(process.env.DB_PASSWORD);
+const MONGO_URL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hrfhj.mongodb.net/URL-DB?retryWrites=true&w=majority`;
+
 
 mongoose.connect(MONGO_URL, {
     useNewUrlParser: true,
@@ -97,8 +51,3 @@ mongoose.connect(MONGO_URL, {
 mongoose.connection.on("open", function() {
     console.log("Connected to MongoDB database.")
   })
-
-
-// app.listen(port, () => {
-//     console.log(`Server is Running on http://localhost:${port}`);
-// })
