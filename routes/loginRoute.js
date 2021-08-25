@@ -5,8 +5,11 @@ const bcrypt        =   require("bcrypt");
 const UserSchema    =   require("../models/usermodel");
 const router        =   express.Router();
 
+//TODO: Handle breakage case of wrong password
 
-SECRET = process.env.SEC;
+
+
+const SECRET = process.env.MONGO_URL;
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../src/login.html"));
@@ -24,16 +27,12 @@ router.post("/", async (req, res) => {
   if (await bcrypt.compare(pswrd, user.password)) {
     const token = jwt.sign({ un: usrname }, SECRET);
     res.cookie("token", token, { maxAge: 900000, httpOnly: true });
-    console.log("USER NAME OBTINEED: ", usrname);
     res.send({
       status: 200,
       LoginToken: token,
       message: "Logged In Sucessfully",
     });
   }
-
-  console.log(usrname);
-  console.log(pswrd);
 });
 
 module.exports = router;

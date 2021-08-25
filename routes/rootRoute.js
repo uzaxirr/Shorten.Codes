@@ -14,7 +14,6 @@ router.get("/:sludge", async (req, res) => {
   if (foundObj) {
     var newClicks = foundObj.clicks + 1;
     foundObj.clicks = newClicks;
-    console.log(foundObj.clicks);
     await foundObj.save();
     return res.redirect(foundObj.longUrl);
   } else {
@@ -23,7 +22,6 @@ router.get("/:sludge", async (req, res) => {
 });
 
 router.post("/", auth, async (req, res) => {
-  console.table(req.user);
   const url = req.body.name_field;
   var sludge = req.body.sludge;
   const { longUrl } = req.body;
@@ -32,7 +30,6 @@ router.post("/", auth, async (req, res) => {
     return res.send({ Error: "Sludge Already in Use" });
   }
   let shortURL = "https://shorten.codes/" + sludge;
-  //var foundURL =  await URLSchemaMongo.findOne({url});
   let GenBy = req.user || null;
   var foundURL = new URLSchemaMongo({
     longUrl: url,
