@@ -4,11 +4,6 @@ const URLSchemaMongo    =   require("../models/urlModel");
 const router            =   express.Router();
 const auth              =   require("../middleware/auth");
 
-router.get("/", auth, async (req, res) => {
-  console.table(req.user);
-  res.sendFile(path.join(__dirname, "../src/index.html"));
-});
-
 router.get("/:sludge", async (req, res) => {
   const foundObj = await URLSchemaMongo.findOne({ urlCode: req.params.sludge });
   if (foundObj) {
@@ -24,12 +19,14 @@ router.get("/:sludge", async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   console.table(req.user);
-  const url = req.body.name_field;
+  const url = req.body.url;
   var sludge = req.body.sludge;
   const { longUrl } = req.body;
   const alreadyExist = await URLSchemaMongo.findOne({ urlCode: sludge });
   if (alreadyExist) {
-    return res.send({ Error: "Sludge Already in Use" });
+    return res.status(400).send({
+      message: "Nickname already in use :("
+    });
   }
   let shortURL = "https://shorten.codes/" + sludge;
   //var foundURL =  await URLSchemaMongo.findOne({url});
@@ -45,11 +42,11 @@ router.post("/", auth, async (req, res) => {
   foundURL.save();
 
   res.setHeader("Content-Type", "application/json");
-  res.end(
+  res.status(200).end(
     JSON.stringify({
-      "URL Recived": url,
-      Sludge: sludge,
-      "Short URL": shortURL,
+      longUrl: url,
+      sludge: sludge,
+      shortUrl: shortURL,
     })
   );
 });
