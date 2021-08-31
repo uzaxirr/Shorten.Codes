@@ -9,10 +9,7 @@ router.post("/", async (req, res) => {
   let usrname = req.body.username;
   let pswrd = req.body.password;
 
-  console.log(usrname);
   pswrd = await bcrypt.hash(pswrd, 10);
-  console.log(pswrd);
-
   try {
     // const foundObj =  await URLSchemaMongo.findOne({urlCode: req.params.sludge});
     const user = await UserSchema.findOne({ username: usrname });

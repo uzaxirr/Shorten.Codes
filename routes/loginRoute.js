@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
   if (await bcrypt.compare(pswrd, user.password)) {
     const token = jwt.sign({ un: usrname }, SECRET);
     res.cookie("token", token, { maxAge: 900000, httpOnly: true });
-    console.log("USER NAME OBTINEED: ", usrname);
     
     res.status(200).send({
       isLoggedin: true,
@@ -30,9 +29,6 @@ router.post("/", async (req, res) => {
   } else {
     return res.status(400).send({message: "Incorrect Password"});
   }
-
-  console.log(usrname);
-  console.log(pswrd);
 });
 
 module.exports = router;

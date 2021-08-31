@@ -14,7 +14,6 @@ router.post("/", auth, (req, res) => {
         return res.status(401).send({ message: err });
       } else {
         const urlCount = docs.length;
-        console.log(docs)
         return res.send({ status: 200, count: urlCount, links: docs });
       }
     });

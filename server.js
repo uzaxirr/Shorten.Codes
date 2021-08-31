@@ -12,15 +12,12 @@ const signUpRoute       =     require('./routes/sign-upRoute');
 const loginRoute        =     require('./routes/loginRoute');
 const dashboardRoute    =     require('./routes/dashboardRoute');
 const logoutRoute       =     require('./routes/logoutRoute')
+const MONGO_URL         =     process.env.MONGO_URL;
 
-
+//TODO: URL Not Found error after logout
 app.set(port, process.env.PORT);
 app.use(cors({origin: true, credentials: true}));
 app.use(express.static(path.join(__dirname, 'build')));
-// app.get('/*', function (req, res) {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
-
 app.use(morgan('combined'));
 app.use(cookieParser());
 app.use(express.json());
@@ -30,12 +27,6 @@ app.use('/login', loginRoute);
 app.use('/logout', logoutRoute)
 app.use('/dashboard', dashboardRoute);
 app.use('/', mainRoute);
-// app.use("/:sludge", redirectRoute);
-
-
-console.log(process.env.DB_USERNAME);
-console.log(process.env.DB_PASSWORD);
-const MONGO_URL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.hrfhj.mongodb.net/URL-DB?retryWrites=true&w=majority`;
 
 
 mongoose.connect(MONGO_URL, {

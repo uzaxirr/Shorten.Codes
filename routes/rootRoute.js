@@ -9,7 +9,6 @@ router.get("/:sludge", async (req, res) => {
   if (foundObj) {
     var newClicks = foundObj.clicks + 1;
     foundObj.clicks = newClicks;
-    console.log(foundObj.clicks);
     await foundObj.save();
     return res.redirect(foundObj.longUrl);
   } else {
